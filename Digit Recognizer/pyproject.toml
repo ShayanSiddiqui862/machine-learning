@@ -1,7 +1,7 @@
 [project]
 name = "digit-recognizer"
 version = "0.1.0"
-description = "Add your description here"
+description = "Digit Recognizer App built by Shayan Siddiqui"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
