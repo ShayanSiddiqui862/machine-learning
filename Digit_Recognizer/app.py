@@ -8,17 +8,15 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.decomposition import PCA
 
-# Streamlit page config
 st.set_page_config(page_title="MSINT Digit Recognizer", page_icon="🔢", layout="centered")
 st.title("MSINT DIGIT RECOGNIZER")
 st.write("Upload an image of a handwritten digit (0-9) to predict the number using a K-Nearest Neighbors model.")
 
-# Load and train model (cached)
 @st.cache_resource
 def load_and_train_data():
     base_dir = os.path.dirname(__file__)
     csv_path = os.path.join(base_dir, "train.csv")
-    df = pd.read_csv(csv_path)  # MNIST dataset
+    df = pd.read_csv(csv_path)  
     X = df.iloc[:, 1:]
     Y = df.iloc[:, 0]
 
@@ -39,40 +37,40 @@ def load_and_train_data():
 
 scaler, pca, knn = load_and_train_data()
 
-# 🛠️ Fix: Don't normalize to 0-1 before scaling!
+
 def preprocess_image(image):
     img = image.convert('L')  # Grayscale
-    img = img.resize((28, 28))  # Resize to 28x28
+    img = img.resize((28, 28))  
     img_array = np.array(img)
 
     # Auto-invert if background is white
     if np.mean(img_array) > 127:
         img_array = 255 - img_array
 
-    # Show preprocessed image
+    
     st.image(img_array, caption="Preprocessed Image", width=150, clamp=True)
 
-    # Flatten to 1D
-    img_flat = img_array.flatten().reshape(1, -1)  # Shape (1, 784)
+    
+    img_flat = img_array.flatten().reshape(1, -1)  
 
-    # Scale and transform (same as training)
+    
     img_scaled = scaler.transform(img_flat)
     img_pca = pca.transform(img_scaled)
 
     return img_pca
 
-# Image uploader
+
 uploaded_file = st.file_uploader("Choose an image of a handwritten digit", type=["png", "jpg", "jpeg"])
 
 if uploaded_file:
     image = Image.open(uploaded_file)
     st.image(image, caption="Uploaded Image", use_column_width=True)
 
-    # Use session state to avoid stale predictions
+    
     if "last_image_bytes" not in st.session_state or st.session_state["last_image_bytes"] != uploaded_file.getvalue():
         st.session_state["last_image_bytes"] = uploaded_file.getvalue()
 
-        # Preprocess and predict
+        
         img_pca = preprocess_image(image)
 
         try:
@@ -84,7 +82,7 @@ if uploaded_file:
 
         st.session_state["last_prediction"] = (prediction[0], probability) if prediction is not None else (None, None)
 
-    # Show prediction
+    
     pred_digit, prob = st.session_state.get("last_prediction", (None, None))
     if pred_digit is not None:
         st.subheader("Prediction")
