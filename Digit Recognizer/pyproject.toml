@@ -1,0 +1,15 @@
+[project]
+name = "digit-recognizer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy>=2.3.2",
+    "opencv-python>=4.11.0.86",
+    "pandas>=2.3.1",
+    "pillow>=11.3.0",
+    "ptl>=0.3.0",
+    "scikit-learn>=1.7.1",
+    "streamlit>=1.48.0",
+]
