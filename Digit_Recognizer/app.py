@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np 
 import pandas as pd
 from PIL import Image
+import os
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
@@ -15,7 +16,9 @@ st.write("Upload an image of a handwritten digit (0-9) to predict the number usi
 # Load and train model (cached)
 @st.cache_resource
 def load_and_train_data():
-    df = pd.read_csv("train.csv")  # MNIST dataset
+    base_dir = os.path.dirname(__file__)
+    csv_path = os.path.join(base_dir, "train.csv")
+    df = pd.read_csv(csv_path)  # MNIST dataset
     X = df.iloc[:, 1:]
     Y = df.iloc[:, 0]
 
